@@ -4,7 +4,8 @@ import {ethers} from 'ethers';
 const window ={};
 
 // User generates an ETH address
-const address = ethers.Wallet.createRandom().address;
+let address = ethers.Wallet.createRandom().address;
+address = "0x811B92EB81211F60699f58eaF952b427e5c3402e";
 // Identity issuer creates an did and assign it to the user
 const did = (() => {
   const has = zkDID.did.hasDID(address);
