@@ -1,5 +1,5 @@
 const DID_Artifact = require("../artifacts/contracts/DID.sol/MeDid.json")
-const DID_address = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const DID_address = '0x74b9E2831E82fFA27A1CE397cccc49113AfE5E53';
 //0x5FbDB2315678afecb367f032d93F642f64180aa3
 
 async function main() {
@@ -40,24 +40,19 @@ async function create() {
         gasPrice: 10 * (10 ** 9)
     }
     // await DID.mint(user_address, ethers.utils.keccak256(ethers.utils.toUtf8Bytes(did)),overrides);
-    // await DID.mint(user_address, did, overrides);
+    await DID.mint(user_address, did, overrides);
 
 
-    let factory = new ethers.ContractFactory(DID_Artifact.abi, DID_Artifact.bytecode, wallet,);
+    // let factory = new ethers.ContractFactory(DID_Artifact.abi, DID_Artifact.bytecode, wallet,);
 
-    let contract = await factory.deploy('MeDid', 'MeDid', overrides);
-    console.log(contract.address);
-    await contract.deployed()
+    // let contract = await factory.deploy('MeDid', 'MeDid', overrides);
+    // console.log(contract.address);
+    // await contract.deployed()
 
     console.log('2');
 
-    DID = new ethers.Contract(
-        DID_address,
-        DID_Artifact.abi,
-        wallet
-    );
 
-    let onchainDid = await DID.getDid('0x811B92EB81211F60699f58eaF952b427e5c3402e');
+    let onchainDid = await DID.getDid(user_address);
     console.log("user's onchainDid is:" + onchainDid);
 }
 
