@@ -1,11 +1,21 @@
-import zkDID from 'zkDID';
-import {ethers} from 'ethers';
+import zkDID from 'zkdid';
+import { ethers } from 'ethers';
+// let http = require('http');
+import http from 'http';
+import querystring from 'querystring';
+import url from 'url';
 
-const window ={};
+const window = {};
+process.argv.forEach((val, index) => {
+  console.log(`${index}: ${val}`)
+})
+
+let address = process.argv.slice(2)[0];
+console.log(address);
 
 // User generates an ETH address
-let address = ethers.Wallet.createRandom().address;
-address = "0x811B92EB81211F60699f58eaF952b427e5c3402e";
+// let address = ethers.Wallet.createRandom().address;
+// address = "0x811B92EB81211F60699f58eaF952b427e5c3402e";
 // Identity issuer creates an did and assign it to the user
 const did = (() => {
   const has = zkDID.did.hasDID(address);
@@ -34,3 +44,78 @@ async function verify() {
   // res: true
 }
 verify();
+
+
+function getDid(address: string) {
+  const did = (() => {
+    const has = zkDID.did.hasDID(address);
+    if (!has) zkDID.did.createDID(address);
+    return zkDID.did.getDID(address);
+  })();
+
+  return did;
+}
+
+
+let server = http.createServer(function (req, res) {
+
+  console.log("================================================================");
+
+  let address;
+  if (req.url !== undefined) {
+    var param = url.parse(req.url);
+    console.log(param.query);
+    address = param.query?.split("=")[1];
+  }
+  let serverDid;
+  if (address !== undefined) {
+    serverDid = getDid(address);
+    console.log(serverDid);
+  }
+
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+
+  // //  配置响应信息
+  if(serverDid!==undefined){
+    res.write(serverDid.id.split(':')[2]);
+  }
+
+  // //   发送响应数据
+  // res.write('<h1>111</h1>');
+  // res.write('<h1>222</h1>');
+  res.end();  // 响应结束
+  // });
+
+  // 3.当接收表单提交的数据完毕之后，就可以进一步处理了
+  //注册end事件，所有数据接收完成会执行一次该方法
+  // req.on('end', function () {
+
+  //   //（1）.对url进行解码（url会对中文进行编码）
+  //   data = decodeURI(data);
+  //   // console.log(data);
+
+  //   /**post请求参数不能使用url模块解析，因为他不是一个url，而是一个请求体对象 */
+
+  //   //（2）.使用querystring对url进行反序列化（解析url将&和=拆分成键值对），得到一个对象
+  //   //querystring是nodejs内置的一个专用于处理url的模块，API只有四个，详情见nodejs官方文档
+  //   var dataObject = querystring.parse(data);
+  //   console.log(dataObject);
+  //   console.log(dataObject[address]);
+  // });
+
+
+  // let did = getDid();
+
+  // res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' })
+  // //  配置响应信息
+  // res.write('<h1>你好，这是你人生中创建的第一个服务器</h1>');
+  // //   发送响应数据
+  // res.write('<h1>111</h1>');
+  // res.write('<h1>222</h1>');
+  // res.end('<h1>响应结束！！！</h1>');  // 响应结束
+})
+
+
+server.listen(8000, function () {
+  console.log(`server is running at http://127.0.0.1:8000`);
+})
