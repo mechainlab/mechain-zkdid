@@ -15,9 +15,6 @@ contract MeDid is Ownable {
     mapping(address => string) public dids;
     uint256 public total;
 
-    // The ecdsa signer used to verify claim for user prizes
-    address public _trustedSigner;
-
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
@@ -32,11 +29,7 @@ contract MeDid is Ownable {
      * @param user The address receiving the minted tokens
      * @param did The tokenId of xnft getting minted
      */
-    function createDid(address user, string memory did) external {
-        
-        address signer = ecrecover(_createMessageDigest(address(this), msg.sender), signature.v, signature.r, signature.s);
-        require(signer != address(0), "PrizeSigner is zero address.");
-        require(_trustedSigner == signer, "PrizeSignature invalid.");
+    function mint(address user, string memory did) external onlyOwner {
         //mint xnft to user
         dids[user] = did;
         ++total;
@@ -61,20 +54,4 @@ contract MeDid is Ownable {
         delete dids[user];
         --total;
     }
-
-
-
-    /**
-     * @dev _createMessageDigest.
-     * @param _campaign campaign address
-     * @param _user user address
-     * @param _amount prize amount for claim
-     **/
-    function _createMessageDigest(address _campaign, address _user, uint256 _amount) internal pure returns (bytes32) {
-        return keccak256(
-            abi.encodePacked(
-                "\x19Ethereum Signed Message:\n32",
-                keccak256(abi.encodePacked(_campaign, _user, _amount))
-            )
-    );
 }
