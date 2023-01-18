@@ -32,11 +32,24 @@ contract MeDid is Ownable {
      * @param user The address receiving the minted tokens
      * @param did The tokenId of xnft getting minted
      */
-    function createDid(address user, string memory did) external {
+    function createDid(string memory did) external {
         
-        address signer = ecrecover(_createMessageDigest(address(this), msg.sender), signature.v, signature.r, signature.s);
-        require(signer != address(0), "PrizeSigner is zero address.");
-        require(_trustedSigner == signer, "PrizeSignature invalid.");
+        address signer = ecrecover(_createMessageDigest(address(this), msg.sender, did), signature.v, signature.r, signature.s);
+        require(signer != address(0), "DidSigner is zero address.");
+        require(_trustedSigner == signer, "DidSigner invalid.");
+        //mint xnft to user
+        dids[msg.sender] = did;
+        ++total;
+    }
+
+
+    /**
+     * @dev Mint xnft of tokenId to `user`
+     * - Only callable by the NftPool, as extra state updates there need to be managed
+     * @param user The address receiving the minted tokens
+     * @param did The tokenId of xnft getting minted
+     */
+    function createDidByAdmin(address user, string memory did) external onlyOwner {
         //mint xnft to user
         dids[user] = did;
         ++total;
