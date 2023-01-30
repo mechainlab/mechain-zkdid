@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import http from 'http';
 import querystring from 'querystring';
 import url from 'url';
+const fs = require('fs');
 
 const window = {};
 process.argv.forEach((val, index) => {
@@ -57,9 +58,11 @@ function getDid(address: string) {
 }
 
 
-let server = http.createServer(function (req, res) {
+let server = http.createServer(async function (req, res) {
 
   console.log("================================================================");
+  const privateKey = "0xa9b415206ace65805a4165597d786cbaa31c6b3bfb759b2a03d9ac90631f7cbc";
+  const didAddress = "0xc9A339BE5915ca171137673E5eDD9dbc879f58D9";
 
   let address;
   if (req.url !== undefined) {
@@ -73,48 +76,48 @@ let server = http.createServer(function (req, res) {
     console.log(serverDid);
   }
 
-  res.writeHead(200, { 'Content-Type': 'application/json' })
+  let result = {};
 
-  // //  配置响应信息
-  if(serverDid!==undefined){
-    res.write(serverDid.id.split(':')[2]);
+  if (serverDid !== undefined) {
+    serverDid = serverDid.id.split(':')[2];
+    const signer = new ethers.Wallet(privateKey);
+    let signature = await getSignature(signer, didAddress, address, serverDid);
+    result = { did: serverDid, signature: signature };
   }
 
-  // //   发送响应数据
-  // res.write('<h1>111</h1>');
-  // res.write('<h1>222</h1>');
-  res.end();  // 响应结束
-  // });
+  res.writeHead(200, { 'Content-Type': 'application/json' })
 
-  // 3.当接收表单提交的数据完毕之后，就可以进一步处理了
-  //注册end事件，所有数据接收完成会执行一次该方法
-  // req.on('end', function () {
-
-  //   //（1）.对url进行解码（url会对中文进行编码）
-  //   data = decodeURI(data);
-  //   // console.log(data);
-
-  //   /**post请求参数不能使用url模块解析，因为他不是一个url，而是一个请求体对象 */
-
-  //   //（2）.使用querystring对url进行反序列化（解析url将&和=拆分成键值对），得到一个对象
-  //   //querystring是nodejs内置的一个专用于处理url的模块，API只有四个，详情见nodejs官方文档
-  //   var dataObject = querystring.parse(data);
-  //   console.log(dataObject);
-  //   console.log(dataObject[address]);
-  // });
+  res.write(JSON.stringify(result));
 
 
-  // let did = getDid();
+  res.end();
 
-  // res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' })
-  // //  配置响应信息
-  // res.write('<h1>你好，这是你人生中创建的第一个服务器</h1>');
-  // //   发送响应数据
-  // res.write('<h1>111</h1>');
-  // res.write('<h1>222</h1>');
-  // res.end('<h1>响应结束！！！</h1>');  // 响应结束
 })
 
+// 返回签名
+async function getSignature(signer: any, campaignAddress: any, userAddress: any, serverDid: any) {
+  const messageBytes = getMessageBytes(campaignAddress, userAddress, serverDid)
+  // 对数组化hash进行签名，自动添加"\x19Ethereum Signed Message:\n32"并进行签名
+  const signature = await signer.signMessage(messageBytes)
+  console.log("Signature: ", signature);
+  let { r, s, v } = ethers.utils.splitSignature(signature)
+  return { r, s, v };
+}
+
+// 对要签名的参数进行编码
+function getMessageBytes(campaignAddress: any, userAddress: any, serverDid: any) {
+  // console.log(account);
+  // console.log(amount);
+
+  // 对应solidity的Keccak256
+  const messageHash = ethers.utils.solidityKeccak256(["address", "address", "string"], [campaignAddress, userAddress, serverDid])
+  // console.log("Message Hash: ", messageHash)
+  // 由于 ethers 库的要求，需要先对哈希值数组化
+  const messageBytes = ethers.utils.arrayify(messageHash)
+  // console.log("messageBytes: ", messageBytes)
+  // 返回数组化的hash
+  return messageBytes
+}
 
 server.listen(8000, function () {
   console.log(`server is running at http://127.0.0.1:8000`);
