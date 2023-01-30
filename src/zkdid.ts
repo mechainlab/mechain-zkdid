@@ -64,32 +64,54 @@ let server = http.createServer(async function (req, res) {
   const privateKey = "0xa9b415206ace65805a4165597d786cbaa31c6b3bfb759b2a03d9ac90631f7cbc";
   const didAddress = "0xc9A339BE5915ca171137673E5eDD9dbc879f58D9";
 
-  let address;
+  let result = {};
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+
+  let address = undefined;
   if (req.url !== undefined) {
     var param = url.parse(req.url);
-    console.log(param.query);
+    // console.log(param.query);
+    if (param === undefined || param.query === undefined || param.query?.includes("=") === false) {
+      result = { error: "address is undefined" };
+      res.write(JSON.stringify(result));
+      res.end();
+      return;
+    }
     address = param.query?.split("=")[1];
   }
+
+  if (address === undefined) {
+    result = { error: "address is undefined" };
+    res.write(JSON.stringify(result));
+    res.end();
+    return;
+  }
+
+  if (ethers.utils.isAddress(address) === false) {
+    result = { error: "Not an eth address" };
+    res.write(JSON.stringify(result));
+    res.end();
+    return;
+  }
+
   let serverDid;
   if (address !== undefined) {
     serverDid = getDid(address);
     console.log(serverDid);
   }
 
-  let result = {};
 
-  if (serverDid !== undefined) {
+  if (serverDid !== undefined && address !== undefined) {
     serverDid = serverDid.id.split(':')[2];
     const signer = new ethers.Wallet(privateKey);
     let signature = await getSignature(signer, didAddress, address, serverDid);
     result = { did: serverDid, signature: signature };
+  } else {
+    result = { error: "address Format error" }
   }
 
-  res.writeHead(200, { 'Content-Type': 'application/json' })
 
   res.write(JSON.stringify(result));
-
-
   res.end();
 
 })

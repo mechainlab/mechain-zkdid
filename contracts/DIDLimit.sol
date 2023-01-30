@@ -45,6 +45,9 @@ contract MeDid is Ownable {
     function createDid(DidSignature memory signature, string memory did)
         external
     {
+        bytes memory didBytes = bytes(dids[msg.sender]);
+        require(didBytes.length == 0, "did already created.");
+
         address signer = ecrecover(
             _createMessageDigest(address(this), msg.sender, did),
             signature.v,
