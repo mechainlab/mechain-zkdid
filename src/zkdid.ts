@@ -59,6 +59,14 @@ function getDid(address: string) {
 
 
 let server = http.createServer(async function (req, res) {
+  
+  //设置允许跨域的域名，*代表允许任意域名跨域
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  //允许的header类型
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  //跨域允许的请求方式 
+  res.setHeader("Access-Control-Allow-Methods", "DELETE,PUT,POST,GET,OPTIONS");
+
 
   console.log("================================================================");
   const privateKey = "0xa9b415206ace65805a4165597d786cbaa31c6b3bfb759b2a03d9ac90631f7cbc";
@@ -142,5 +150,5 @@ function getMessageBytes(campaignAddress: any, userAddress: any, serverDid: any)
 }
 
 server.listen(8000, function () {
-  console.log(`server is running at http://127.0.0.1:8000`);
+  console.log(`server is running at http://127.0.0.1:8000/did`);
 })
