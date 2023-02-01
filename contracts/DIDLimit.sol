@@ -49,7 +49,7 @@ contract MeDid is Ownable {
         require(didBytes.length == 0, "did already created.");
 
         address signer = ecrecover(
-            _createMessageDigest(address(this), msg.sender, did),
+            _createMessageDigest(address(this), msg.sender),
             signature.v,
             signature.r,
             signature.s
@@ -115,18 +115,16 @@ contract MeDid is Ownable {
      * @dev _createMessageDigest.
      * @param _did_contract did_contract address
      * @param _user user address
-     * @param _did user did
      **/
     function _createMessageDigest(
         address _did_contract,
-        address _user,
-        string memory _did
+        address _user
     ) internal pure returns (bytes32) {
         return
             keccak256(
                 abi.encodePacked(
                     "\x19Ethereum Signed Message:\n32",
-                    keccak256(abi.encodePacked(_did_contract, _user, _did))
+                    keccak256(abi.encodePacked(_user))
                 )
             );
     }

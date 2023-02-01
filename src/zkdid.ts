@@ -70,7 +70,7 @@ let server = http.createServer(async function (req, res) {
 
   console.log("================================================================");
   const privateKey = "0xa9b415206ace65805a4165597d786cbaa31c6b3bfb759b2a03d9ac90631f7cbc";
-  const didAddress = "0xc9A339BE5915ca171137673E5eDD9dbc879f58D9";
+  const didAddress = "0x0D7487598Dd00a9B275F74760FED10b688582040";
 
   let result = {};
   res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -126,7 +126,7 @@ let server = http.createServer(async function (req, res) {
 
 // 返回签名
 async function getSignature(signer: any, campaignAddress: any, userAddress: any, serverDid: any) {
-  const messageBytes = getMessageBytes(campaignAddress, userAddress, serverDid)
+  const messageBytes = getMessageBytes(campaignAddress, userAddress)
   // 对数组化hash进行签名，自动添加"\x19Ethereum Signed Message:\n32"并进行签名
   const signature = await signer.signMessage(messageBytes)
   console.log("Signature: ", signature);
@@ -135,12 +135,12 @@ async function getSignature(signer: any, campaignAddress: any, userAddress: any,
 }
 
 // 对要签名的参数进行编码
-function getMessageBytes(campaignAddress: any, userAddress: any, serverDid: any) {
+function getMessageBytes(campaignAddress: any, userAddress: any) {
   // console.log(account);
   // console.log(amount);
 
   // 对应solidity的Keccak256
-  const messageHash = ethers.utils.solidityKeccak256(["address", "address", "string"], [campaignAddress, userAddress, serverDid])
+  const messageHash = ethers.utils.solidityKeccak256(["address"], [userAddress])
   // console.log("Message Hash: ", messageHash)
   // 由于 ethers 库的要求，需要先对哈希值数组化
   const messageBytes = ethers.utils.arrayify(messageHash)

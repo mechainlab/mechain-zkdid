@@ -13,7 +13,7 @@ module.exports = {
     },
     mechainTest: {
       url: `http://8.210.44.55:9933`,
-      accounts: [`0x4027a8cdd87fd1d24e66c7a6630ef7f57baecfc1df4a6be884996aa212fb23c6`]
+      accounts: [`0x5a461d9c29eb6e4fd5429fb2991ccb32bedaa9a9f0ad82ae50bdf131b9a8b026`]
     }
   }
 };
