@@ -11,9 +11,10 @@ async function deploy() {
   // // Connect a wallet to localhost
   // let customHttpProvider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
-  let privateKey = "0x4027a8cdd87fd1d24e66c7a6630ef7f57baecfc1df4a6be884996aa212fb23c6";
+  let privateKey = "0x315bdde188acc16b06b41b3ccb06da359c2bbb5a60072b61aa13f907aaaeb782";
   // Connect a wallet to localhost
-  let customHttpProvider = new ethers.providers.JsonRpcProvider("http://8.210.44.55:9933");
+  // let customHttpProvider = new ethers.providers.JsonRpcProvider("http://8.210.44.55:9933");
+  let customHttpProvider = new ethers.providers.JsonRpcProvider("https://polygon-mumbai.g.alchemy.com/v2/YbE4U9U8b3M74_Un2wTDK83R0M2W1Ksf");
 
   let deployer = new ethers.Wallet(privateKey, customHttpProvider);
   console.log("Account balance:", (await deployer.getBalance()).toString());

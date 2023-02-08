@@ -14,6 +14,10 @@ module.exports = {
     mechainTest: {
       url: `http://8.210.44.55:9933`,
       accounts: [`0x5a461d9c29eb6e4fd5429fb2991ccb32bedaa9a9f0ad82ae50bdf131b9a8b026`]
+    },
+    polygonTest: {
+      url: `https://polygon-mumbai.g.alchemy.com/v2/YbE4U9U8b3M74_Un2wTDK83R0M2W1Ksf`,
+      accounts: [`0x315bdde188acc16b06b41b3ccb06da359c2bbb5a60072b61aa13f907aaaeb782`]
     }
   }
 };

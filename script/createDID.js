@@ -1,5 +1,5 @@
 const DID_Artifact = require("../artifacts/contracts/DIDLimit.sol/MeDid.json")
-const DID_address = '0x0D7487598Dd00a9B275F74760FED10b688582040';
+const DID_address = '0x3dC5105A3606900afF950311E3a00B6FAC028e51';
 //0x5FbDB2315678afecb367f032d93F642f64180aa3
 
 async function main() {
@@ -14,9 +14,11 @@ async function create() {
     // // Connect a wallet to localhost
     // let customHttpProvider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
-    let privateKey = "3a27db91e4a3d140aa2e7b96678dd8784fdea7a1763945eeace74e33ff145f6d";
+    let privateKey = "0x315bdde188acc16b06b41b3ccb06da359c2bbb5a60072b61aa13f907aaaeb782";
     // Connect a wallet to localhost
-    let customHttpProvider = new ethers.providers.JsonRpcProvider("http://8.210.44.55:9933");
+    // let customHttpProvider = new ethers.providers.JsonRpcProvider("http://8.210.44.55:9933");
+    let customHttpProvider = new ethers.providers.JsonRpcProvider("https://polygon-mumbai.g.alchemy.com/v2/YbE4U9U8b3M74_Un2wTDK83R0M2W1Ksf");
+
     let wallet = new ethers.Wallet(privateKey, customHttpProvider);
     console.log("Account balance:", (await wallet.getBalance()).toString());
 
@@ -28,7 +30,7 @@ async function create() {
     );
     console.log(wallet.address);
 
-    let user_address = "0x0bBfB1ec515149688366C519ACB01E26e0C52CFb";
+    let user_address = "0x193E70F5E72e838AdC6ee2A926C02979639D243d";
     let did = "z6MkhBxkb8pUtTAVaTyPHXjdAbyifi96f5KQjLdeDwgpig7Z";
 
     // console.log(ethers.utils.formatBytes32String(did));
@@ -42,17 +44,17 @@ async function create() {
     }
 
     let signature = {
-        "r": "0x01833d842a9fb2f2ea2a0a00e851f453b29b6993d5ee04bc758223b93e6cfb86",
-        "s": "0x21598076a2efc9809976f8d95b99524dcb5b7307392e31174468e8a0687e42bf",
-        "v": 28
+        "r": "0xc4bd524a51f80f803eda7c95bf27d1684df2d92b8f762380158ce556a50b71f9",
+        "s": "0x1dc163d8926cbb47e258ff81b95c53ca526de25ea68bf100c57d94d6fdb28ea2",
+        "v": 27
     }
 
     // await DID.mint(user_address, ethers.utils.keccak256(ethers.utils.toUtf8Bytes(did)),overrides);
-    let result = await DID.createDid(signature, did, overrides);
-    console.log(result);
+    // let result = await DID.createDid(signature, did, overrides);
+    // console.log(result);
 
-    let receipt = await customHttpProvider.getTransactionReceipt(result.hash);
-    console.log(receipt);
+    // let receipt = await customHttpProvider.getTransactionReceipt(result.hash);
+    // console.log(receipt);
 
     // let factory = new ethers.ContractFactory(DID_Artifact.abi, DID_Artifact.bytecode, wallet,);
 
