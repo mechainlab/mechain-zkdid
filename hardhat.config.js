@@ -2,14 +2,14 @@ require("@nomicfoundation/hardhat-toolbox");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.5.8",
+  solidity: "0.8.0",
   networks: {
     hardhat: {
       chainId: 1337 // We set 1337 to make interacting with MetaMask simpler
     },
     goerli: {
       url: `https://eth-goerli.g.alchemy.com/v2/h7o_tmDkleRAyaReOYzYyLns-hbTrHkM`,
-      accounts: ['0x1a82db40df07c58023286e517870af8a5c949902e12784d514b89462536ed0e2']
+      accounts: ['0x1a82db40df07c58023286e517870af8a5c949902e12784d514b89462536ed0e2aaaa']
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/3-VefB24BzwJ9dnkb9sKABundlDLZrRj`,
