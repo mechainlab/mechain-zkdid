@@ -70,7 +70,7 @@ let server = http.createServer(async function (req, res) {
 
   console.log("================================================================");
   const privateKey = "0xa9b415206ace65805a4165597d786cbaa31c6b3bfb759b2a03d9ac90631f7cbc";
-  const didAddress = "0x0D7487598Dd00a9B275F74760FED10b688582040";
+  const didAddress = "0x54145851A01B082B103c26A01efC8E959Bc8004D";
 
   let result = {};
   res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -149,6 +149,6 @@ function getMessageBytes(campaignAddress: any, userAddress: any) {
   return messageBytes
 }
 
-server.listen(8000, function () {
-  console.log(`server is running at http://127.0.0.1:8000/did`);
+server.listen(8082, function () {
+  console.log(`server is running at http://127.0.0.1:8082/did`);
 })

@@ -1,5 +1,5 @@
 const DID_Artifact = require("../artifacts/contracts/DIDLimit.sol/MeDid.json")
-const DID_address = '0x3dC5105A3606900afF950311E3a00B6FAC028e51';
+const DID_address = '0xc928De83a0518AE29ab1f493E1D29D80Fa97F8A4';
 //0x5FbDB2315678afecb367f032d93F642f64180aa3
 
 async function main() {
@@ -14,10 +14,13 @@ async function create() {
     // // Connect a wallet to localhost
     // let customHttpProvider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
-    let privateKey = "0x315bdde188acc16b06b41b3ccb06da359c2bbb5a60072b61aa13f907aaaeb782";
+    let privateKey = "0x3b5fa25662d894970b103baf757ffacc929864a1ee8afa73d59bb4e1a0aa740d";
     // Connect a wallet to localhost
     // let customHttpProvider = new ethers.providers.JsonRpcProvider("http://8.210.44.55:9933");
-    let customHttpProvider = new ethers.providers.JsonRpcProvider("https://polygon-mumbai.g.alchemy.com/v2/YbE4U9U8b3M74_Un2wTDK83R0M2W1Ksf");
+    // let customHttpProvider = new ethers.providers.JsonRpcProvider("https://eth-goerli.g.alchemy.com/v2/h7o_tmDkleRAyaReOYzYyLns-hbTrHkM");
+    let customHttpProvider = new ethers.providers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/3-VefB24BzwJ9dnkb9sKABundlDLZrRj");
+
+    // url: `https://goerli.infura.io/v3/8890b0405f0e4de4b2e24a90767e9114`,
 
     let wallet = new ethers.Wallet(privateKey, customHttpProvider);
     console.log("Account balance:", (await wallet.getBalance()).toString());
@@ -30,27 +33,22 @@ async function create() {
     );
     console.log(wallet.address);
 
-    let user_address = "0x193E70F5E72e838AdC6ee2A926C02979639D243d";
-    let did = "z6MkhBxkb8pUtTAVaTyPHXjdAbyifi96f5KQjLdeDwgpig7Z";
-
-    // console.log(ethers.utils.formatBytes32String(did));
-    // console.log(ethers.utils.toUtf8Bytes(did));
-    console.log('1');
-
+    let user_address = "0x69916fb3bbaa0767bb90d1d06c2e5b6ac28dad4b";
+    let did = "z6MktUuHQLCHwJpVw3sYUxFYzxEFcmuQSPeZA6A3oCS4FP6Q";
 
     const overrides = {
-        gasLimit: 9999999,
-        gasPrice: 10 * (10 ** 9)
+        gasLimit: 200000,
+        maxPriorityFeePerGas:10* (10 ** 9),
+        maxFeePerGas:20* (10 ** 9)
     }
 
     let signature = {
-        "r": "0xc4bd524a51f80f803eda7c95bf27d1684df2d92b8f762380158ce556a50b71f9",
-        "s": "0x1dc163d8926cbb47e258ff81b95c53ca526de25ea68bf100c57d94d6fdb28ea2",
+        "r": "0x636a720a5083601cab681d2569c3c24ed7d76150c25fb51100da0947d05cadbe",
+        "s": "0x039166c73e2314ec0e625b9c6b8ac5b652f67e6fbc74ba8f5d04a27840c3bb52",
         "v": 27
     }
 
-    // await DID.mint(user_address, ethers.utils.keccak256(ethers.utils.toUtf8Bytes(did)),overrides);
-    // let result = await DID.createDid(signature, did, overrides);
+    // let result = await DID.createDid(signature, did);
     // console.log(result);
 
     // let receipt = await customHttpProvider.getTransactionReceipt(result.hash);
