@@ -14,7 +14,7 @@ async function create() {
     // // Connect a wallet to localhost
     // let customHttpProvider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
-    let privateKey = "0x3b5fa25662d894970b103baf757ffacc929864a1ee8afa73d59bb4e1a0aa740d";
+    let privateKey = "";
     // Connect a wallet to localhost
     // let customHttpProvider = new ethers.providers.JsonRpcProvider("http://8.210.44.55:9933");
     // let customHttpProvider = new ethers.providers.JsonRpcProvider("https://eth-goerli.g.alchemy.com/v2/h7o_tmDkleRAyaReOYzYyLns-hbTrHkM");
